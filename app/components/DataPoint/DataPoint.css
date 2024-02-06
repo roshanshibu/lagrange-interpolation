@@ -9,7 +9,7 @@ input[type="number"] {
 }
 
 .dataItem {
-  margin: 1rem;
+  margin: var(--margin-1x);
   background-color: var(--light-primary);
   border-radius: var(--border-radius-1);
   display: flex;

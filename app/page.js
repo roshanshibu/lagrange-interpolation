@@ -9,12 +9,14 @@ export default function Home() {
   const [Target, setTarget] = useState(1);
   const [Result, setResult] = useState(0);
   const [Error, setError] = useState(false);
+  const [FocusIndex, setFocusIndex] = useState(null);
 
   const addNewDataPoint = () => {
     setDataPoints([
       ...DataPoints,
       { x: +DataPoints[DataPoints.length - 1].x + 1, y: 0 },
     ]);
+    setFocusIndex(DataPoints.length);
   };
 
   const updateDataPoint = (newX, newY, index) => {
@@ -86,6 +88,7 @@ export default function Home() {
               index={index}
               updateDataPoint={updateDataPoint}
               removeDataPoint={removeDataPoint}
+              FocusIndex={FocusIndex}
             />
           );
         })}
