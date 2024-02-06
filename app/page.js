@@ -76,7 +76,9 @@ export default function Home() {
 
   return (
     <main>
-      <h1 className="branding">Lagrange Interpolation</h1>
+      <h1 className="branding">
+        Lagrange <span>INTERPOLATION</span>
+      </h1>
 
       <section className="dataContainer">
         {DataPoints.map((dataPoint, index) => {
@@ -97,16 +99,17 @@ export default function Home() {
         </button>
       </section>
       <section className="computeContainer">
-        <p>Interpolate nth term,</p>
+        <p>
+          Interpolate n<sup>th</sup> term,
+        </p>
         <div className="targetContainer">
           <p>n =</p>
           <input
             type="number"
-            value={Target}
+            value={Number(Target).toString()}
+            defaultValue={1}
+            placeholder="1"
             onChange={(e) => setTarget(e.target.value)}
-            onFocus={(e) => {
-              e.target.select();
-            }}
           />
         </div>
       </section>
