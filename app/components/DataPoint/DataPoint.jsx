@@ -1,7 +1,14 @@
 import { useState } from "react";
 import "./DataPoint.css";
 
-const DataPoint = ({ x, y, index, updateDataPoint, removeDataPoint }) => {
+const DataPoint = ({
+  x,
+  y,
+  index,
+  updateDataPoint,
+  removeDataPoint,
+  FocusIndex,
+}) => {
   const [isFocused, setIsFocused] = useState(false);
   return (
     <div
@@ -27,6 +34,7 @@ const DataPoint = ({ x, y, index, updateDataPoint, removeDataPoint }) => {
         id="dataY"
         className="dataYInput"
         value={Number(y).toString()}
+        autoFocus={index == FocusIndex}
         onChange={(e) => {
           updateDataPoint(x, e.target.value, index);
         }}
