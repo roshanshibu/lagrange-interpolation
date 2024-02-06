@@ -110,7 +110,7 @@ export default function Home() {
       {Error ? (
         <p className="error">Error! Duplicate x values</p>
       ) : (
-        <p className="result">{Result}</p>
+        <p className="result">{Math.round(Result * 1000) / 1000}</p>
       )}
     </main>
   );
