@@ -1,95 +1,117 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { useEffect, useState } from "react";
+import DataPoint from "./components/DataPoint/DataPoint";
+import "./page.css";
 
 export default function Home() {
+  const [DataPoints, setDataPoints] = useState([{ x: 1, y: 0 }]);
+  const [Target, setTarget] = useState(1);
+  const [Result, setResult] = useState(0);
+  const [Error, setError] = useState(false);
+
+  const addNewDataPoint = () => {
+    setDataPoints([
+      ...DataPoints,
+      { x: +DataPoints[DataPoints.length - 1].x + 1, y: 0 },
+    ]);
+  };
+
+  const updateDataPoint = (newX, newY, index) => {
+    setDataPoints(
+      DataPoints.map((d, i) => {
+        if (i == index) {
+          d.x = +newX;
+          d.y = +newY;
+        }
+        return d;
+      })
+    );
+  };
+  const removeDataPoint = (index) => {
+    setDataPoints(DataPoints.filter((d, i) => i != index));
+  };
+
+  function hasDuplicateX(array) {
+    let encounteredXValues = {};
+    for (let obj of array) {
+      if (encounteredXValues[obj.x]) {
+        return true;
+      } else {
+        encounteredXValues[obj.x] = true;
+      }
+    }
+    return false;
+  }
+
+  function interpolate() {
+    let f = DataPoints;
+    let xi = Target;
+
+    // check if there are duplicate X values
+    if (hasDuplicateX(DataPoints)) {
+      console.log("remove duplicates!");
+      setError(true);
+      return;
+    }
+
+    setError(false);
+    let result = 0;
+    let n = f.length;
+    for (let i = 0; i < n; i++) {
+      let term = f[i].y;
+      for (let j = 0; j < n; j++) {
+        if (j != i) term = (term * (xi - f[j].x)) / (f[i].x - f[j].x);
+      }
+      result += term;
+    }
+    setResult(result);
+  }
+
+  useEffect(() => {
+    interpolate();
+  }, [DataPoints, Target]);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+    <main>
+      <h1 className="branding">Lagrange Interpolation</h1>
+
+      <section className="dataContainer">
+        {DataPoints.map((dataPoint, index) => {
+          return (
+            <DataPoint
+              key={index}
+              x={dataPoint.x}
+              y={dataPoint.y}
+              index={index}
+              updateDataPoint={updateDataPoint}
+              removeDataPoint={removeDataPoint}
             />
-          </a>
+          );
+        })}
+        <button onClick={addNewDataPoint} className="addDataPointButton">
+          +
+        </button>
+      </section>
+      <section className="computeContainer">
+        <p>Interpolate nth term,</p>
+        <div className="targetContainer">
+          <p>n =</p>
+          <input
+            type="number"
+            value={Target}
+            onChange={(e) => setTarget(e.target.value)}
+            onFocus={(e) => {
+              e.target.select();
+            }}
+          />
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      </section>
+      {Error ? (
+        <p className="error">Error! Duplicate x values</p>
+      ) : (
+        <p className="result">{Result}</p>
+      )}
     </main>
   );
 }

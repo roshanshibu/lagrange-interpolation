@@ -1,0 +1,60 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.dataItem {
+  margin: 1rem;
+  background-color: var(--light-primary);
+  border-radius: var(--border-radius-1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  transition: padding 0.2s;
+}
+.dataItem input {
+  outline: none;
+  border: none;
+  font-size: var(--input-font-size);
+  text-align: center;
+}
+.extraPadding {
+  padding: 10px 15px;
+}
+
+.dataXInput {
+  padding: 10px 0;
+  width: var(--x-input-width);
+  border-radius: var(--border-radius-2);
+  background-color: var(--primary);
+}
+.dataYInput {
+  width: var(--y-input-width);
+  background-color: transparent;
+}
+
+.removeDataPointButton {
+  transition: font-size 0.2s;
+  margin: 0;
+  padding: 0 10px 0 0;
+  background: transparent;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  color: var(--primary);
+}
+
+.show {
+  font-size: var(--input-font-size);
+  transform: scale(1);
+}
+.hide {
+  font-size: 0px;
+  transform: scale(0);
+}
