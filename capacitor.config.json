@@ -1,0 +1,8 @@
+{
+  "appId": "com.roshanshibu.lagrange",
+  "appName": "Lagrange",
+  "webDir": "out",
+  "server": {
+    "androidScheme": "https"
+  }
+}
